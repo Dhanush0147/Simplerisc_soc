@@ -4,11 +4,7 @@
 
 ## 1. Introduction
 
-This document serves as the **official reference manual** for the **Simplerisc Processor and SoC**. It is intended for:
-
-* New users trying to understand or program the processor
-* RTL developers navigating the design
-* Interviewers or reviewers evaluating the architecture
+This document serves as the ** reference manual** for the **Simplerisc Processor and SoC**. It is intended for:
 
 The document explains the system **from software-visible ISA down to pipeline-level microarchitecture**, followed by system control features such as CSRs, interrupts, and peripherals.
 
