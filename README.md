@@ -151,7 +151,8 @@ The TinyRISC processor uses a **5-stage in-order pipeline**:
 
 ### 6.1 Processor Core Block Diagram
 
-> **[Insert Processor Core / Pipeline Architecture Image Here]**
+![TinyRISC Processor Core Block Diagram](processor_core.png)
+
 
 ---
 
