@@ -83,7 +83,12 @@ Immediate modifiers:
 | 26–0  | Branch offset |
 
 ---
+### 6.1 Processor Core Block Diagram
 
+![TinyRISC Processor Core Block Diagram](processor_core.png)
+
+
+---
 ### 4.4 CSR Instruction Format
 
 CSR operations are encoded using a special `mov` instruction variant.
@@ -145,12 +150,7 @@ The TinyRISC processor uses a **5-stage in-order pipeline**:
 4. Memory Access (MA)
 5. Write Back (WB)
 
-### 6.1 Processor Core Block Diagram
 
-![TinyRISC Processor Core Block Diagram](processor_core.png)
-
-
----
 
 ## 7. Pipeline Stage Details
 
