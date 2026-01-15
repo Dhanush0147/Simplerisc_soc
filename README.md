@@ -14,49 +14,7 @@ The document explains the system **from software-visible ISA down to pipeline-le
 
 ---
 
-## 2. Reference Documents
 
-The TinyRISC project is accompanied by three reference PDFs. Each document has a specific purpose and should be read in the following order:
-
-### 2.1 TinyRISC Specification (`tinyrisc_spec.pdf`)
-
-This document defines the **programmer’s view** of the processor.
-It includes:
-
-* Complete Instruction Set Architecture (ISA)
-* Instruction opcodes and formats
-* CSR definitions and bit fields
-* Interrupt model and priority scheme
-* APB protocol usage
-* Peripheral programming model (UART, Timer, GPIO, PWM, SPI)
-
-This is the **primary document for software development**.
-
-### 2.2 TinyRISC Microarchitecture Documentation (`doc_tinyrisc.pdf`)
-
-This document describes the **internal hardware implementation** of the processor.
-It includes:
-
-* Processor core block diagrams
-* Five-stage pipeline explanation
-* Hazard detection, forwarding, and stalling
-* Interrupt pipeline interaction
-* Watchdog and reset behavior
-
-This is the **primary document for RTL understanding and debugging**.
-
-### 2.3 Design Hierarchy (`Hierarchy.pdf`)
-
-This document provides a **complete RTL module hierarchy** of the SoC.
-It is useful for:
-
-* Navigating the source code
-* Understanding module instantiation
-* Tracing signals across the design
-
-This is the **primary document for RTL navigation**.
-
----
 
 ## 3. Instruction Set Architecture (ISA)
 
@@ -363,18 +321,46 @@ Only documented bits are writable; others are reserved.
 
 ---
 
-## 13. Summary
+## 2. Reference Documents
 
-TinyRISC provides a complete embedded processing solution with:
+The TinyRISC project is accompanied by three reference PDFs. Each document has a specific purpose and should be read in the following order:
 
-* Clean and well-defined ISA
-* Robust 5-stage pipeline
-* Realistic hazard handling
-* Full interrupt and watchdog support
-* Simple APB-based peripheral integration
+### 2.1 TinyRISC Specification (`tinyrisc_spec.pdf`)
 
-This document, along with the reference PDFs, forms a **complete official documentation set** for understanding, using, and extending the TinyRISC processor.
+This document defines the **programmer’s view** of the processor.
+It includes:
+
+* Complete Instruction Set Architecture (ISA)
+* Instruction opcodes and formats
+* CSR definitions and bit fields
+* Interrupt model and priority scheme
+* APB protocol usage
+* Peripheral programming model (UART, Timer, GPIO, PWM, SPI)
+
+This is the **primary document for software development**.
+
+### 2.2 TinyRISC Microarchitecture Documentation (`doc_tinyrisc.pdf`)
+
+This document describes the **internal hardware implementation** of the processor.
+It includes:
+
+* Processor core block diagrams
+* Five-stage pipeline explanation
+* Hazard detection, forwarding, and stalling
+* Interrupt pipeline interaction
+* Watchdog and reset behavior
+
+This is the **primary document for RTL understanding and debugging**.
+
+### 2.3 Design Hierarchy (`Hierarchy.pdf`)
+
+This document provides a **complete RTL module hierarchy** of the SoC.
+It is useful for:
+
+* Navigating the source code
+* Understanding module instantiation
+* Tracing signals across the design
+
+This is the **primary document for RTL navigation**.
 
 ---
-
-**End of Official Documentation**
