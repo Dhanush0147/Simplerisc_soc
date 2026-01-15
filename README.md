@@ -4,7 +4,7 @@
 
 ## 1. Introduction
 
-This document serves as the **official reference manual** for the **TinyRISC Processor and SoC**. It is intended for:
+This document serves as the **official reference manual** for the **Simplerisc Processor and SoC**. It is intended for:
 
 * New users trying to understand or program the processor
 * RTL developers navigating the design
