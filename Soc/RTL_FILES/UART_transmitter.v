@@ -1,94 +1,84 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 01.04.2025 13:27:40
-// Design Name: 
-// Module Name: UART_transmitter11
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+module uart_tx (
+    input  wire        clk,
+    input  wire        reset,
+    input  wire        baud_tick,
+    input  wire        ENABLE,
+    input  wire        TXEN,
+    input  wire        SPEN,
+    input  wire [31:0] UART_data,
+    input  wire [1:0]  uart_control,   
+    output reg         TX,
+    output reg         TXIF
+);
 
+    parameter IDLE      = 3'b000,
+              LOAD      = 3'b001,
+              SHIFT     = 3'b010,
+              NEXT_BYTE = 3'b011,
+              DONE      = 3'b100;
+    reg [2:0] state;
+    reg [9:0]  shift_reg;
+    reg [3:0]  bit_cnt;
+    reg [1:0]  byte_cnt;
+    reg [31:0] tx_buf;
 
-module UART_transmitter(EN_50MHz,ENABLE,UART_data, clk,reset,TXEN, baud_sel,TXIF, TX, uart_control,SPEN);
-    input [31:0]UART_data;
-    input [1:0]uart_control;
-    input ENABLE;
-    input wire [1:0] baud_sel;
-    input EN_50MHz;
-    input clk, reset, TXEN, SPEN;
-    output TX;
-    output TXIF;
-    
-    
-    
-    wire br_out;
-    wire not_reset;
-    wire baudrate;
-    wire TSR_Ready_top;
-//    wire TXIF_top;
-    wire [31:0] TXREG_top;
-    wire TXREG_to_TSR_en_top;
-    wire serial_out_top;
-    
-    wire baud_top;
-    wire baud_50MHz_top;
-    wire [2:0] mode_top;
-    
-    assign not_reset = ~reset;
-    
-  
-     
-    
-  
-    baudrate_gen baud(.baud_sel(baud_sel),.clk(clk),.rst(reset),.baud_100MHz(baud_top),.EN_50MHz(EN_50MHz));
-  
- 
-    and a1(baudrate, TXEN, baud_top);
-    
-  
-   
-   
-   TXREG_8bit TXREG_8bit (
-   .clk(clk),
-   .rst(reset),
-   .write_enable(ENABLE), 
-   .uart_control(uart_control),
-   .TSR_Ready(TSR_Ready_top),
-   .TXIF(TXIF),
-   .data_in(UART_data),
-   .mode(mode_top),
-   .TXREG(TXREG_top),
-   .TXREG_to_TSR_en(TXREG_to_TSR_en_top)
-   );
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            state     <= IDLE;
+            TX        <= 1'b1;
+            TXIF      <= 1'b1;
+            bit_cnt   <= 4'd0;
+            byte_cnt  <= 2'd0;
+            shift_reg <= 10'b1111111111;
+        end else begin
+            case (state)
 
+                IDLE: begin
+                    TX   <= 1'b1;
+                    TXIF <= 1'b1;
+                    if (ENABLE && TXEN && SPEN) begin
+                        tx_buf   <= UART_data;
+                        byte_cnt <= 2'd0;
+                        TXIF     <= 1'b0;
+                        state    <= LOAD;
+                    end
+                end
 
+                LOAD: begin
+                    shift_reg <= {1'b1, tx_buf[8*byte_cnt +: 8], 1'b0};
+                    bit_cnt   <= 4'd0;
+                    state     <= SHIFT;
+                end
 
-    TSR11_bit t2(.TXREG(TXREG_top), 
-    .serial_out(serial_out_top), 
-    .TSR_Ready(TSR_Ready_top), 
-    .TXREG_to_TSR_en(TXREG_to_TSR_en_top),
-    .uart_control(uart_control),
-    .clk_ext(clk),
-    .write_enable(ENABLE),
-    .clk(baudrate), 
-    .reset(reset),
-    .mode(mode_top)
-    
-    );
-   
+                SHIFT: begin
+                    if (baud_tick) begin
+                        TX        <= shift_reg[0];
+                        shift_reg <= {1'b1, shift_reg[9:1]};
+                        bit_cnt   <= bit_cnt + 1'b1;
 
-   active_high_buffer  active_high_buffer(.in(serial_out_top),.out(TX),.enable(SPEN));
-   
-  
+                        if (bit_cnt == 4'd9)
+                            state <= NEXT_BYTE;
+                    end
+                end
+
+                NEXT_BYTE: begin
+                    if (byte_cnt < uart_control) begin
+                        byte_cnt <= byte_cnt + 1'b1;
+                        state    <= LOAD;
+                    end else begin
+                        state <= DONE;
+                    end
+                end
+
+                DONE: begin
+                    TX   <= 1'b1;
+                    TXIF <= 1'b1;
+                    state <= IDLE;
+                end
+
+                default: state <= IDLE;
+
+            endcase
+        end
+    end
 endmodule
